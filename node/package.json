@@ -1,0 +1,8 @@
+{
+    "description": "Node server between artik.io and jeedom",
+    "name": "node-server",
+    "version": "0.1.0",
+    "license": "AGPL",
+    "contributors": [],
+    "private": true
+}

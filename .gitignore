@@ -1,0 +1,11 @@
+nbproject/
+node/node_modules
+test.php
+core/config/common.config.php
+plugins
+sftp-config.json
+.project
+.DS_Store
+Thumbs.db
+*.php~
+resources/devices.json

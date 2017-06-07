@@ -1,0 +1,81 @@
+{"devices":[
+    {
+        "name": "Toggle Switch",
+        "group": "Input",
+        "configuration": {
+            "model": "fr.fredericfrance.jeedomswitch",
+            "type": "jeecloud"
+        },
+        "commands": [
+            {
+                "name": "State",
+                "type": "info",
+                "subtype": "binary",
+                "display": {
+                    "generic_type": "GENERIC"
+                },
+                "isVisible": 1,
+                "isHistorized": 0,
+                "logicalId": "switch:state"
+            },
+            {
+                "name": "Toggle",
+                "type": "action",
+                "subtype": "other",
+                "display": {
+                    "generic_type": "GENERIC"
+                },
+                "configuration": {
+                    "request": "state"
+                },
+                "logicalId": "switch:toggle",
+                "template": {
+                    "dashboard": "line",
+                    "mobile": "line"
+                }
+            },
+            {
+                "name": "Message",
+                "type": "action",
+                "subtype": "message",
+                "display": {
+                    "generic_type": "GENERIC",
+                    "title_placeholder" : "Title",
+                    "message_placeholder" : "Message"
+                },
+                "logicalId": "switch:message",
+                "template": {
+                    "dashboard": "line",
+                    "mobile": "line"
+                }
+            }
+        ]
+    },
+    {
+        "name": "Relay",
+        "group": "Output",
+        "configuration": {
+            "type": "jeecloud"
+        },
+        "commands": [
+            {
+                "name": "State",
+                "type": "info",
+                "subtype": "binary",
+                "display": {
+                    "generic_type": "GENERIC"
+                },
+                "isVisible": 1,
+                "isHistorized": 0,
+                "logicalId": "relay:state"
+            }
+        ]
+    },
+    {
+        "name": "Temperature",
+        "group": "Analog",
+        "configuration": {
+            "type": "jeecloud"
+        }
+    }
+]}

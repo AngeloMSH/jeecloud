@@ -1,0 +1,11 @@
+{
+    "id": "jeecloud",
+    "name": "Jeecloud",
+    "description": "Plugin pour upload de données vers le Cloud",
+    "licence": "AGPL",
+    "author": "frederic34",
+    "require": "2.3",
+    "category": "programming",
+    "hasDependency": 1,
+    "hasOwnDeamon": 1
+}

@@ -1,0 +1,75 @@
+{
+    "plugins\/jeecloud\/plugin_info\/info.json": {
+        "Plugin pour upload de données vers le Cloud": "Plugin pour upload de données vers le Cloud"
+    },
+    "plugins\/jeecloud\/plugin_info\/configuration.php": {
+        "Client Id": "Client Id",
+        "Client Secret": "Client Secret",
+        "Global param 2": "Global param 2"
+    },
+    "plugins\/jeecloud\/desktop\/php\/jeecloud.php": {
+        "Ajouter un template": "Ajouter un template",
+        "Rechercher": "Rechercher",
+        "Mes templates": "Mes templates",
+        "Gestion": "Gestion",
+        "Ajouter": "Ajouter",
+        "Configuration": "Configuration",
+        "Sauvegarder": "Sauvegarder",
+        "Supprimer": "Supprimer",
+        "Configuration avancée": "Configuration avancée",
+        "Equipement": "Equipement",
+        "Commandes": "Commandes",
+        "Nom de l'équipement template": "Nom de l'équipement template",
+        "Objet parent": "Objet parent",
+        "Aucun": "Aucun",
+        "Activer": "Activer",
+        "Visible": "Visible",
+        "template param 1": "template param 1",
+        "Nom": "Nom",
+        "Type": "Type",
+        "Action": "Action",
+        "My jeeclouds": "My jeeclouds",
+        "Nom de l'équipement jeecloud": "Nom de l'équipement jeecloud",
+        "device id": "device id",
+        "device token": "device token",
+        "Relay": "Relay",
+        "Switch": "Switch",
+        "Temperature": "Temperature",
+        "Output": "Output",
+        "Analog": "Analog",
+        "Input": "Input",
+        "Equipment": "Equipment",
+        "My Jeeclouds": "My Jeeclouds",
+        "Sous-Type": "Sous-Type",
+        "Valeur": "Valeur",
+        "Unité": "Unité",
+        "Paramètres": "Paramètres",
+        "Ajouter une info virtuelle": "Ajouter une info virtuelle",
+        "Ajouter une commande virtuelle": "Ajouter une commande virtuelle",
+        "Ajouter une commande": "Ajouter une commande"
+    },
+    "plugins\/jeecloud\/desktop\/js\/jeecloud.js": {
+        "Nom": "Nom",
+        "Tester": "Tester",
+        "Unité": "Unité",
+        "Calcul": "Calcul",
+        "Rechercher équipement": "Rechercher équipement",
+        "Valeur retour d\\'état": "Valeur retour d\\'état",
+        "Durée avant retour d\\'état (min)": "Durée avant retour d\\'état (min)",
+        "Nom information": "Nom information",
+        "Valeur": "Valeur",
+        "La valeur de la commande vaut par défaut la commande": "La valeur de la commande vaut par défaut la commande"
+    },
+    "plugins\/jeecloud\/core\/class\/jeecloud.class.php": {
+        "jeecloud not configured": "jeecloud not configured",
+        "State": "State",
+        "Toggle": "Toggle",
+        "Message": "Message",
+        "Empty fields": "Empty fields",
+        "Temperature": "Temperature",
+        "Le nom de la commande info ne peut etre vide": "Le nom de la commande info ne peut etre vide"
+    },
+    "plugins\/jeecloud\/core\/api\/jeecloud.php": {
+        "API key not valid, you are not authorized to do this action (jeecloud)": "API key not valid, you are not authorized to do this action (jeecloud)"
+    }
+}
