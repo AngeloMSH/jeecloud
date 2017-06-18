@@ -227,11 +227,11 @@ class jeecloud extends eqLogic {
     /**
      * Send command to nodejs server.
      */
-    public static function sendCommand($device_id, $data) {
+    public static function sendCommand($ddid, $data) {
         $ip = '127.0.0.1';
         $port = '8099';
-        $msg = '{"device_id":"' . $device_id . '", "data":' . $data . '}';
-	    log::add('jeecloud', 'info', 'send command: ' . $msg);
+        $msg = '{"device_id":"' . $ddid . '", "data":' . $data . '}';
+        log::add('jeecloud', 'info', 'send command: ' . $msg);
         $fp = fsockopen($ip, $port, $errstr);
         if (!$fp) {
             log::add("ERROR: $errstr");
@@ -250,6 +250,8 @@ class jeecloud extends eqLogic {
         $newState = $jeecloudCmd->getConfiguration('value')?false:true;
         $jeecloudCmd->setConfiguration('value', $newState);
         $jeecloudCmd->save();
+        $data = '{"state": "'.($newState?"on":"off").'"}';
+        $result = jeecloud::sendCommand($this->getConfiguration('device_id'), $data);
         $jeecloudCmd->event($newState);
         log::add('jeecloud', 'debug', 'newState : ' . ($newState?"true":"false"));
     }
@@ -262,6 +264,8 @@ class jeecloud extends eqLogic {
         $jeecloudCmd = jeecloudCmd::byEqLogicIdAndLogicalId($this->getId(),'jeecloud:state');
         $jeecloudCmd->setConfiguration('value', true);
         $jeecloudCmd->save();
+        $data = '{"state": "on"}';
+        $result = jeecloud::sendCommand($this->getConfiguration('device_id'), $data);
         $jeecloudCmd->event(true);
         log::add('jeecloud', 'debug', 'newState : true');
     }
@@ -274,6 +278,8 @@ class jeecloud extends eqLogic {
         $jeecloudCmd = jeecloudCmd::byEqLogicIdAndLogicalId($this->getId(),'jeecloud:state');
         $jeecloudCmd->setConfiguration('value', false);
         $jeecloudCmd->save();
+        $data = '{"state": "off"}';
+        $result = jeecloud::sendCommand($this->getConfiguration('device_id'), $data);
         $jeecloudCmd->event(false);
         log::add('jeecloud', 'debug', 'newState : false');
     }
@@ -428,8 +434,8 @@ class jeecloudCmd extends cmd {
     
     public function preSave() {
         if ($this->getLogicalId() == 'refresh') {
-			return;
-		}
+            return;
+        }
         if ($this->getConfiguration('virtualAction') == 1) {
 			$actionInfo = jeecloudCmd::byEqLogicIdCmdName($this->getEqLogic_id(), $this->getName());
 			if (is_object($actionInfo)) {
@@ -492,8 +498,8 @@ class jeecloudCmd extends cmd {
 		if ($this->getType() == 'info' && $this->getConfiguration('virtualAction', 0) == '0' && $this->getConfiguration('calcul') != '') {
 			$this->event($this->execute());
 		}
-	}
-    
+    }
+
     public function execute($_options = array()) {
         log::add('jeecloud', 'debug', '*** execute cmd *** '. $this->getName(). ' ' . $this->getType(). ' ' . $this->getSubType()). ' '. $this->getConfiguration('virtualAction', 0);
 
@@ -520,11 +526,11 @@ class jeecloudCmd extends cmd {
 						log::add('jeecloud', 'info', $e->getMessage());
 						return jeedom::evaluateExpression($this->getConfiguration('calcul'));
 					}
-				}
+                }
                 else
                 {
                     log::add('jeecloud', 'debug', 'cmd info not virtual');
-					return $this->getValue();
+                    return $this->getValue();
                 }
                 break;
             case 'action' :
@@ -563,12 +569,7 @@ class jeecloudCmd extends cmd {
                         log::add('jeecloud', 'error', 'Empty device_id');
                         return true;
                     }
-                    $state = $eqLogic->getState();
-                    $data = '{"' . $request . '": '.($state?0:1).'}';
-                    $result = jeecloud::sendCommand(
-                        $eqLogic->getConfiguration('device_id'),
-                        $data
-                    );
+
                     $eqLogic->toggle();
 
                     return $request;
