@@ -330,7 +330,7 @@ class jeecloud extends eqLogic {
             $cmdlogic = jeecloudCmd::byEqLogicIdAndLogicalId($this->getId(), 'jeecloud:state');
             if (!is_object($cmdlogic)) {
                 $jeecloudCmd = new jeecloudCmd();
-                $jeecloudCmd->setName(__('State', __FILE__));
+                $jeecloudCmd->setName(__('state', __FILE__));
                 $jeecloudCmd->setEqLogic_id($this->id);
                 $jeecloudCmd->setEqType('jeecloud');
                 $jeecloudCmd->setLogicalId('jeecloud:state');
@@ -359,7 +359,7 @@ class jeecloud extends eqLogic {
             $cmdlogic = jeecloudCmd::byEqLogicIdAndLogicalId($this->getId(), 'jeecloud:state');
             if (!is_object($cmdlogic)) {
                 $jeecloudCmd = new jeecloudCmd();
-                $jeecloudCmd->setName(__('State', __FILE__));
+                $jeecloudCmd->setName(__('state', __FILE__));
                 $jeecloudCmd->setEqLogic_id($this->id);
                 $jeecloudCmd->setEqType('jeecloud');
                 $jeecloudCmd->setLogicalId('jeecloud:state');
@@ -437,7 +437,7 @@ class jeecloudCmd extends cmd {
             return;
         }
         if ($this->getConfiguration('virtualAction') == 1) {
-			$actionInfo = jeecloudCmd::byEqLogicIdCmdName($this->getEqLogic_id(), $this->getName());
+            $actionInfo = jeecloudCmd::byEqLogicIdCmdName($this->getEqLogic_id(), $this->getName());
 			if (is_object($actionInfo)) {
 				$this->setId($actionInfo->getId());
 			}
@@ -472,7 +472,7 @@ class jeecloudCmd extends cmd {
 			    $calcul = $this->getConfiguration('calcul');
 			    if (strpos($calcul, '#' . $this->getId() . '#') !== false) {
 				    throw new Exception(__('Vous ne pouvez faire un calcul sur la valeur elle meme (boucle infinie)!!!', __FILE__));
-			    }
+                }
 			    preg_match_all("/#([0-9]*)#/", $calcul, $matches);
 			    $value = '';
 			    foreach ($matches[1] as $cmd_id) {
@@ -495,41 +495,50 @@ class jeecloudCmd extends cmd {
     }
     
     public function postSave() {
-		if ($this->getType() == 'info' && $this->getConfiguration('virtualAction', 0) == '0' && $this->getConfiguration('calcul') != '') {
-			$this->event($this->execute());
-		}
+        if ($this->getType() == 'info' && $this->getConfiguration('virtualAction', 0) == '0' && $this->getConfiguration('calcul') != '') {
+            $this->event($this->execute());
+        }
     }
 
     public function execute($_options = array()) {
-        log::add('jeecloud', 'debug', '*** execute cmd *** '. $this->getName(). ' ' . $this->getType(). ' ' . $this->getSubType()). ' '. $this->getConfiguration('virtualAction', 0);
+        log::add('jeecloud', 'debug', 'Execute cmd: '. $this->getName(). ' ' . $this->getType(). ' ' . $this->getSubType() . ' '. ($this->getConfiguration('virtualAction')?"virtual":"physic"));
 
         switch ($this->getType()) {
             case 'info' :
-            	if ($this->getConfiguration('virtualAction', 0) == '0') {
-                    log::add('jeecloud', 'debug', 'cmd info virtual');
-					try {
-						$result = jeedom::evaluateExpression($this->getConfiguration('calcul'));
-						if ($this->getSubType() == 'numeric') {
-							if (is_numeric($result)) {
-								$result = number_format($result, 2);
-							} else {
-								$result = str_replace('"', '', $result);
-							}
-							if (strpos($result, '.') !== false) {
-								$result = str_replace(',', '', $result);
-							} else {
-								$result = str_replace(',', '.', $result);
-							}
-						}
-						return $result;
-					} catch (Exception $e) {
-						log::add('jeecloud', 'info', $e->getMessage());
-						return jeedom::evaluateExpression($this->getConfiguration('calcul'));
-					}
+                if ($this->getConfiguration('virtualAction') == '1') {
+                    try {
+                        $result = jeedom::evaluateExpression($this->getConfiguration('calcul'));
+                        switch ($this->getSubType()) {
+                            case 'numeric':
+                                if (is_numeric($result)) {
+                                    $result = number_format($result, 2);
+                                } else {
+                                    $result = str_replace('"', '', $result);
+                                }
+                                if (strpos($result, '.') !== false) {
+                                    $result = str_replace(',', '', $result);
+                                } else {
+                                    $result = str_replace(',', '.', $result);
+                                }
+                                $data = '{"'.$this->getName().'": "' . $result . '"}';
+                                break;
+                            case 'binary':
+                                $data = '{"'.$this->getName().'": "'. ($result?"on":"off") .'"}';
+                                break;
+                            case 'other':
+                                $data = '{"'.$this->getName().'": "'. $result .'"}';
+                                break;
+                        }
+                        log::add('jeecloud', 'debug', 'retour info virtual: ' . $result);
+                    } catch (Exception $e) {
+                        log::add('jeecloud', 'info', $e->getMessage());
+                        return null;
+                    }
+                    $send = jeecloud::sendCommand($this->getEqLogic()->getConfiguration('device_id'), $data);
+                    return $result;
                 }
                 else
                 {
-                    log::add('jeecloud', 'debug', 'cmd info not virtual');
                     return $this->getValue();
                 }
                 break;
@@ -544,7 +553,7 @@ class jeecloudCmd extends cmd {
                     log::add('jeecloud', 'debug', 'request: ' . $request);
                     switch ($this->getSubType()) {
                         case 'slider':
-                        $request = str_replace('#slider#', $_options['slider'], $request);
+                            $request = str_replace('#slider#', $_options['slider'], $request);
                             break;
                         case 'color':
                             $request = str_replace('#color#', $_options['color'], $request);
@@ -570,7 +579,18 @@ class jeecloudCmd extends cmd {
                         return true;
                     }
 
-                    $eqLogic->toggle();
+                    switch ($this->getname()) {
+                        case 'Toggle':
+                            $eqLogic->toggle();
+                            break;
+                        case 'setOn':
+                            $eqLogic->seton();
+                            break;
+                        case 'setOff':
+                            $eqLogic->setoff();
+                            break;
+                        default:
+                    }
 
                     return $request;
                 }

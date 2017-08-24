@@ -8,7 +8,7 @@
         },
         "commands": [
             {
-                "name": "State",
+                "name": "state",
                 "type": "info",
                 "subtype": "binary",
                 "display": {
@@ -59,7 +59,7 @@
         },
         "commands": [
             {
-                "name": "State",
+                "name": "state",
                 "type": "info",
                 "subtype": "binary",
                 "display": {
@@ -76,6 +76,19 @@
         "group": "Analog",
         "configuration": {
             "type": "jeecloud"
-        }
+        },
+        "commands": [
+            {
+                "name": "temp",
+                "type": "info",
+                "subtype": "numeric",
+                "display": {
+                    "generic_type": "GENERIC"
+                },
+                "isVisible": 1,
+                "isHistorized": 0,
+                "logicalId": "temperature:temp"
+            }
+        ]
     }
 ]}
