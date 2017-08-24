@@ -46,7 +46,7 @@ var watchdog = setInterval(function() {
 function getListOfDevices() {
     // sync read
     console.log(process.cwd());
-    var buffer = fs.readFileSync("../../plugins/jeecloud/resources/devices.json");
+    var buffer = fs.readFileSync("/usr/share/nginx/www/jeedom/plugins/jeecloud/resources/devices.json");
     printLog(buffer);
     var json = JSON.parse(buffer);
     //var json = require("/var/www/html/plugins/jeecloud/resources/devices.json");
