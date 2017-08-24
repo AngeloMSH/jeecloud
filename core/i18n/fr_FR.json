@@ -51,5 +51,10 @@
         "La valeur de la commande vaut par défaut la commande": "La valeur de la commande vaut par défaut la commande",
         "Nom information": "Nom information",
         "Valeur": "Valeur"
+    },
+    "plugins\/jeecloud\/plugin_info\/configuration.php": {
+        "Client Id": "Client Id",
+        "Client Secret": "Client Secret",
+        "Global param 2": "Global param 2"
     }
 }
